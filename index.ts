@@ -7,7 +7,7 @@ const nombre = 'Juanqwerqwer';
 
 console.log(nombre);
 const pelota = 12;
-const server = new Server();
+const server = Server.instance;
 
 server.app.use(
   bodyParser.urlencoded({
@@ -23,6 +23,8 @@ server.app.use(
     credentials: true,
   })
 );
+
+console.log('erer');
 
 // Rutas de servicio
 server.app.use('/', router);
