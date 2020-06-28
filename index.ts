@@ -6,7 +6,7 @@ import cors from 'cors';
 const nombre = 'Juanqwerqwer';
 
 console.log(nombre);
-
+const pelota = 12;
 const server = new Server();
 
 server.app.use(
