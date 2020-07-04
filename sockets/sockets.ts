@@ -2,15 +2,17 @@ import { Socket } from 'socket.io';
 import { UsuariosLista } from '../classes/user-list';
 import { Usuario } from '../classes/user';
 
-export const conectarCliente = (cliente: Socket) => {
+export const conectarCliente = (cliente: Socket, io: SocketIO.Server) => {
   const usuario = new Usuario(cliente.id);
   listaUsuarios.add(usuario);
 };
 
-export const desconectar = (cliente: Socket) => {
+export const desconectar = (cliente: Socket, io: SocketIO.Server) => {
   cliente.on('disconnect', () => {
     listaUsuarios.borrarUsuario(cliente.id);
+    cliente.emit('usuarios-activos');
     console.log('Cliente desconectado');
+    io.emit('usuarios-activos', listaUsuarios.getList());
   });
 };
 
@@ -24,6 +26,13 @@ export const mensaje = (cliente: Socket, io: SocketIO.Server) => {
   });
 };
 
+export const obtenerUsuarios = (cliente: Socket, io: SocketIO.Server) => {
+  cliente.on('obtener-usuarios', () => {
+    // console.log('Logeando usuario', payload.nombre);
+    io.emit('usuarios-activos', listaUsuarios.getList());
+  });
+};
+
 export const configurarUsuario = (cliente: Socket, io: SocketIO.Server) => {
   cliente.on(
     'configurar-usuario',
@@ -34,6 +43,7 @@ export const configurarUsuario = (cliente: Socket, io: SocketIO.Server) => {
         ok: true,
         mensaje: `Usuario ${payload.nombre}, logeado`,
       });
+      io.emit('usuarios-activos', listaUsuarios.getList());
     }
   );
 };

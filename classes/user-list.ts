@@ -22,7 +22,7 @@ export class UsuariosLista {
 
   //   Obtener lista de usuario
   public getList() {
-    return this.lista;
+    return this.lista.filter((user) => user.nombre != 'Anonimo');
   }
 
   public getUser(id: string) {
